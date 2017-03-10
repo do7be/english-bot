@@ -56,6 +56,7 @@ server.listen(port)
 server.on('error', onError);
 
 function onError(error) {
+    console.error(error)
     if (error.syscall !== 'listen') {
         throw error;
     }
