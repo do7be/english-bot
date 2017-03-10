@@ -1,4 +1,4 @@
-const LINE_CHANNEL_ACCESS_TOKEN = 'Channl Access Token';
+const LINE_CHANNEL_ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 
 var express = require('express');
 var bodyParser = require('body-parser');
