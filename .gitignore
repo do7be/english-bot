@@ -1,4 +1,4 @@
-.*
+\.*
 !.gitmodules
 !.gitignore
 node_modules
