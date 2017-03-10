@@ -32,7 +32,7 @@ app.post('/webhook', function(req, res, next) {
                     replyToken: event.replyToken,
                     messages: [{
                         type: 'text',
-                        text: `${data[1]} ${data[2]}`
+                        text: `${data[index][1]} ${data[index][2]}`
                     }]
                 }
                 var url = 'https://api.line.me/v2/bot/message/reply';
