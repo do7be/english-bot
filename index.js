@@ -1,5 +1,7 @@
 const LINE_CHANNEL_ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 
+var fs = require('fs');
+var parse = require('csv-parse');
 var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
@@ -14,27 +16,35 @@ app.use(bodyParser.json());
 app.post('/webhook', function(req, res, next) {
     res.status(200).end();
     for (var event of req.body.events) {
-        console.log(event)
-        if (event.type == 'message' && event.message.text == 'ハロー') {
-            var headers = {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + LINE_CHANNEL_ACCESS_TOKEN
-            }
-            var body = {
-                replyToken: event.replyToken,
-                messages: [{
-                    type: 'text',
-                    text: 'こんにちは'
-                }]
-            }
-            var url = 'https://api.line.me/v2/bot/message/reply';
-            request({
-                url: url,
-                method: 'POST',
-                headers: headers,
-                body: body,
-                json: true
-            });
+        if (event.type == 'message' && event.message.text == '01') {
+            var inputFile = `./dic/level-${event.message.text}.csv`;
+
+            var parser = parse({ delimiter: ';' }, function(err, data) {
+                //console.log(data)
+                var index = Math.floor(Math.random() * (data.length));
+                console.log(data[index])
+
+                var headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + LINE_CHANNEL_ACCESS_TOKEN
+                }
+                var body = {
+                    replyToken: event.replyToken,
+                    messages: [{
+                        type: 'text',
+                        text: `${data[1]} ${data[2]}`
+                    }]
+                }
+                var url = 'https://api.line.me/v2/bot/message/reply';
+                request({
+                    url: url,
+                    method: 'POST',
+                    headers: headers,
+                    body: body,
+                    json: true
+                });
+            })
+            fs.createReadStream(inputFile).pipe(parser);
         }
     }
 });
