@@ -4,6 +4,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
 var app = express();
+var http = require('http');
+var server = http.createServer(app);
 
 app.post('/webhook', function(req, res, next) {
     res.status(200).end();
@@ -31,3 +33,24 @@ app.post('/webhook', function(req, res, next) {
         }
     }
 });
+
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+server.listen(port)
+
+function normalizePort(val) {
+    var port = parseInt(val, 10);
+
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
+
+    if (port >= 0) {
+        // port number
+        return port;
+    }
+
+    return false;
+}
