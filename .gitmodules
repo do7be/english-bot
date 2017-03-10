@@ -1,0 +1,3 @@
+[submodule "dic"]
+	path = dic
+	url = https://github.com/atmarksharp/svl12000-everyday.git
