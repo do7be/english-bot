@@ -6,7 +6,10 @@ var request = require('request');
 var app = express();
 var http = require('http');
 var server = http.createServer(app);
-
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
 app.post('/webhook', function(req, res, next) {
     console.log('POST')
     res.status(200).end();
