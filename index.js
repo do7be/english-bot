@@ -10,7 +10,7 @@ var server = http.createServer(app);
 app.post('/webhook', function(req, res, next) {
     console.log('POST')
     res.status(200).end();
-    console.log(req.body)
+    console.log(req)
     for (var event of req.body.events) {
         console.log(event)
         if (event.type == 'message' && event.message.text == 'ハロー') {
