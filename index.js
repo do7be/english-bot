@@ -16,13 +16,14 @@ app.use(bodyParser.json());
 
 app.post('/webhook', function(req, res, next) {
     res.status(200).end();
-    console.log(req.body.source)
+    console.log(req.body)
     for (var event of req.body.events) {
+        console.log(event)
+        console.log(event.source)
         if (event.type == 'message') {
             var inputFile = `./dic/level-${event.message.text}.csv`;
 
             var parser = parse({ delimiter: ';' }, function(err, data) {
-                //console.log(data)
                 var index = Math.floor(Math.random() * (data.length))
                 console.log(data[index])
 
