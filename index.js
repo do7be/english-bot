@@ -53,7 +53,7 @@ app.post('/webhook', function(req, res, next) {
 
 app.get('/', function(req, res, next) {
     res.status(200).end();
-    var inputFile = `./dic/level-${event.message.text}.csv`;
+    var inputFile = `./dic/level-04.csv`;
 
     var parser = parse({ delimiter: ';' }, function(err, data) {
         //console.log(data)
