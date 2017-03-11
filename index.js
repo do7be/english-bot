@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 app.post('/webhook', function(req, res, next) {
     res.status(200).end();
-    console.log(req.body)
+    console.log(req.body.source)
     for (var event of req.body.events) {
         if (event.type == 'message') {
             var inputFile = `./dic/level-${event.message.text}.csv`;
