@@ -57,21 +57,26 @@ app.get('/', function(req, res, next) {
     var inputFile = `./dic/level-04.csv`;
 
     var parser = parse({ delimiter: ';' }, function(err, data) {
-        //console.log(data)
-        var index = Math.floor(Math.random() * (data.length))
-        console.log(data[index])
-
         var headers = {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + LINE_CHANNEL_ACCESS_TOKEN
         }
+        let words = [{
+            type: 'text',
+            text: `おはようございます。本日もはりきって英単語を覚えましょう！`
+        }]
+        for (let i = 0; i < 3; i++) {
+            const index = Math.floor(Math.random() * (data.length))
+            words.push({
+                type: 'text',
+                text: `${data[index][1]} ${data[index][2]}`
+            })
+        }
         var body = {
             to: MY_ID,
-            messages: [{
-                type: 'text',
-                text: `おはようございます`
-            }]
+            messages: words
         }
+        console.log(body)
         var url = ' https://api.line.me/v2/bot/message/push'
         request({
             url: url,
