@@ -1,4 +1,5 @@
 const LINE_CHANNEL_ACCESS_TOKEN = process.env.ACCESS_TOKEN;
+const MY_ID = process.env.MY_ID;
 
 var fs = require('fs');
 var parse = require('csv-parse');
@@ -64,7 +65,7 @@ app.get('/', function(req, res, next) {
             'Authorization': 'Bearer ' + LINE_CHANNEL_ACCESS_TOKEN
         }
         var body = {
-            to: 'hoge',
+            to: MY_ID,
             messages: [{
                 type: 'text',
                 text: `おはようございます`
