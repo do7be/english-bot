@@ -15,13 +15,14 @@ app.use(bodyParser.json());
 
 app.post('/webhook', function(req, res, next) {
     res.status(200).end();
+    console.log(req.body)
     for (var event of req.body.events) {
         if (event.type == 'message') {
             var inputFile = `./dic/level-${event.message.text}.csv`;
 
             var parser = parse({ delimiter: ';' }, function(err, data) {
                 //console.log(data)
-                var index = Math.floor(Math.random() * (data.length));
+                var index = Math.floor(Math.random() * (data.length))
                 console.log(data[index])
 
                 var headers = {
@@ -35,7 +36,7 @@ app.post('/webhook', function(req, res, next) {
                         text: `${data[index][1]} ${data[index][2]}`
                     }]
                 }
-                var url = 'https://api.line.me/v2/bot/message/reply';
+                var url = 'https://api.line.me/v2/bot/message/reply'
                 request({
                     url: url,
                     method: 'POST',
@@ -47,6 +48,38 @@ app.post('/webhook', function(req, res, next) {
             fs.createReadStream(inputFile).pipe(parser);
         }
     }
+})
+
+app.get('/', function(req, res, next) {
+    res.status(200).end();
+    var inputFile = `./dic/level-${event.message.text}.csv`;
+
+    var parser = parse({ delimiter: ';' }, function(err, data) {
+        //console.log(data)
+        var index = Math.floor(Math.random() * (data.length))
+        console.log(data[index])
+
+        var headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + LINE_CHANNEL_ACCESS_TOKEN
+        }
+        var body = {
+            to: 'hoge',
+            messages: [{
+                type: 'text',
+                text: `おはようございます`
+            }]
+        }
+        var url = ' https://api.line.me/v2/bot/message/push'
+        request({
+            url: url,
+            method: 'POST',
+            headers: headers,
+            body: body,
+            json: true
+        });
+    })
+    fs.createReadStream(inputFile).pipe(parser);
 });
 
 
