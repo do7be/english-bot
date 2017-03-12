@@ -17,7 +17,7 @@ app.use(bodyParser.json())
 app.post('/webhook', function(req, res, next) {
     res.status(200).end()
     for (const event of req.body.events) {
-        if (event.type == 'message') {
+        if (event.type == 'message' && /^0[1-9]$|^1[0-2]$/.test(event.message.text)) {
             const inputFile = `./dic/level-${event.message.text}.csv`
 
             const parser = parse({ delimiter: ';' }, function(err, data) {
@@ -43,11 +43,7 @@ app.post('/webhook', function(req, res, next) {
                     json: true
                 })
             })
-            try {
-                fs.createReadStream(inputFile).pipe(parser)
-            } catch (e) {
-                console.error(e)
-            }
+            fs.createReadStream(inputFile).pipe(parser)
         }
     }
 })
