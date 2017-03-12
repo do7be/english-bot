@@ -1,63 +1,59 @@
-const LINE_CHANNEL_ACCESS_TOKEN = process.env.ACCESS_TOKEN;
-const MY_ID = process.env.MY_ID;
+const LINE_CHANNEL_ACCESS_TOKEN = process.env.ACCESS_TOKEN
+const MY_ID = process.env.MY_ID
 
-var fs = require('fs');
-var parse = require('csv-parse');
-var express = require('express');
-var bodyParser = require('body-parser');
-var request = require('request');
-var app = express();
-var http = require('http');
-var server = http.createServer(app);
+const fs = require('fs')
+const parse = require('csv-parse')
+const express = require('express')
+const bodyParser = require('body-parser')
+const request = require('request')
+const app = express()
+const http = require('http')
+const server = http.createServer(app)
 app.use(bodyParser.urlencoded({
     extended: true
-}));
-app.use(bodyParser.json());
+}))
+app.use(bodyParser.json())
 
 app.post('/webhook', function(req, res, next) {
-    res.status(200).end();
-    console.log(req.body)
-    for (var event of req.body.events) {
-        console.log(event)
-        console.log(event.source)
+    res.status(200).end()
+    for (const event of req.body.events) {
         if (event.type == 'message') {
-            var inputFile = `./dic/level-${event.message.text}.csv`;
+            const inputFile = `./dic/level-${event.message.text}.csv`
 
-            var parser = parse({ delimiter: ';' }, function(err, data) {
-                var index = Math.floor(Math.random() * (data.length))
-                console.log(data[index])
+            const parser = parse({ delimiter: ';' }, function(err, data) {
+                const index = Math.floor(Math.random() * (data.length))
 
-                var headers = {
+                const headers = {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + LINE_CHANNEL_ACCESS_TOKEN
                 }
-                var body = {
+                const body = {
                     replyToken: event.replyToken,
                     messages: [{
                         type: 'text',
                         text: `${data[index][1]} ${data[index][2]}`
                     }]
                 }
-                var url = 'https://api.line.me/v2/bot/message/reply'
+                const url = 'https://api.line.me/v2/bot/message/reply'
                 request({
                     url: url,
                     method: 'POST',
                     headers: headers,
                     body: body,
                     json: true
-                });
+                })
             })
-            fs.createReadStream(inputFile).pipe(parser);
+            fs.createReadStream(inputFile).pipe(parser)
         }
     }
 })
 
 app.get('/', function(req, res, next) {
-    res.status(200).end();
-    var inputFile = `./dic/level-04.csv`;
+    res.status(200).end()
+    const inputFile = `./dic/level-04.csv`
 
-    var parser = parse({ delimiter: ';' }, function(err, data) {
-        var headers = {
+    const parser = parse({ delimiter: ';' }, function(err, data) {
+        const headers = {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + LINE_CHANNEL_ACCESS_TOKEN
         }
@@ -72,66 +68,65 @@ app.get('/', function(req, res, next) {
                 text: `${data[index][1]} ${data[index][2]}`
             })
         }
-        var body = {
+        const body = {
             to: MY_ID,
             messages: words
         }
-        console.log(body)
-        var url = ' https://api.line.me/v2/bot/message/push'
+        const url = ' https://api.line.me/v2/bot/message/push'
         request({
             url: url,
             method: 'POST',
             headers: headers,
             body: body,
             json: true
-        });
+        })
     })
-    fs.createReadStream(inputFile).pipe(parser);
-});
+    fs.createReadStream(inputFile).pipe(parser)
+})
 
 
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+const port = normalizePort(process.env.PORT || '3000')
+app.set('port', port)
 server.listen(port)
-server.on('error', onError);
+server.on('error', onError)
 
 function onError(error) {
     console.error(error)
     if (error.syscall !== 'listen') {
-        throw error;
+        throw error
     }
 
-    var bind = typeof port === 'string' ?
+    const bind = typeof port === 'string' ?
         'Pipe ' + port :
-        'Port ' + port;
+        'Port ' + port
 
     // handle specific listen errors with friendly messages
     switch (error.code) {
         case 'EACCES':
-            console.error(bind + ' requires elevated privileges');
-            process.exit(1);
-            break;
+            console.error(bind + ' requires elevated privileges')
+            process.exit(1)
+            break
         case 'EADDRINUSE':
-            console.error(bind + ' is already in use');
-            process.exit(1);
-            break;
+            console.error(bind + ' is already in use')
+            process.exit(1)
+            break
         default:
-            throw error;
+            throw error
     }
 }
 
 function normalizePort(val) {
-    var port = parseInt(val, 10);
+    const port = parseInt(val, 10)
 
     if (isNaN(port)) {
         // named pipe
-        return val;
+        return val
     }
 
     if (port >= 0) {
         // port number
-        return port;
+        return port
     }
 
-    return false;
+    return false
 }
