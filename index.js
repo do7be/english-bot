@@ -43,7 +43,11 @@ app.post('/webhook', function(req, res, next) {
                     json: true
                 })
             })
-            fs.createReadStream(inputFile).pipe(parser)
+            try {
+                fs.createReadStream(inputFile).pipe(parser)
+            } catch (e) {
+                console.error(e)
+            }
         }
     }
 })
